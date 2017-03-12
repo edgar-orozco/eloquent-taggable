@@ -157,4 +157,27 @@ class TagService
 
         return Tag::fromQuery($sql, [$class]);
     }
+
+  /**
+   * Get all Tags like the given param $like in a given class $class.
+   *
+   * @param \Illuminate\Database\Eloquent\Model|string $class
+   *
+   * @param \Illuminate\Database\Eloquent\Model|string $like
+   *
+   * @return \Illuminate\Database\Eloquent\Collection
+   */
+    public function getAllTagsLike($class, $like)
+    {
+        if ($class instanceof Model) {
+            $class = get_class($class);
+        }
+
+        $sql = 'SELECT DISTINCT t.*' .
+            ' FROM taggable_taggables tt LEFT JOIN taggable_tags t ON tt.tag_id=t.tag_id' .
+            ' WHERE tt.taggable_type = ?'.
+            ' AND UPER(t.name) LIKE UPER(?) ';
+
+        return Tag::fromQuery($sql, [$class, '%'.$like.'%']);
+    }
 }

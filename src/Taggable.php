@@ -217,7 +217,20 @@ trait Taggable
         return $tags->pluck('name')->sort()->all();
     }
 
-    /**
+  /**
+   * Get an array of all tags used for the called class like the given param.
+   * @param $like
+   * @return mixed
+   */
+   public static function allTagsLike($like)
+   {
+      /** @var \Illuminate\Database\Eloquent\Collection $tags */
+      $tags = app(TagService::class)->getAllTagsLike(get_called_class(), $like);
+
+      return $tags->pluck('name')->sort()->all();
+   }
+
+  /**
      * Get all the tags used for the called class as a delimited string.
      *
      * @return string
